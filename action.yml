@@ -1,0 +1,11 @@
+name: 'Sync Action Workflow Across Org'
+description: 'Allows you to sync a workflow across all repos in your org'
+author: 'IAmHughes'
+inputs:
+  
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
+branding:
+  icon: 'book-open' # Icon picked from Feather icons: https://feathericons.com/
+  color: 'green'
