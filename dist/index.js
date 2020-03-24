@@ -24371,7 +24371,7 @@ async function run() {
     const getWorkflowResponse = await github.actions.getWorkflow({
       owner,
       repo,
-      workflow_id: workflowName
+      workflow_file_name: workflowName
     });
 
     // Get the path of the workflow
