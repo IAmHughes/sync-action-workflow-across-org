@@ -1,5 +1,5 @@
 on:
-
+  push
 name: Sync workflows across Org
 
 jobs:
