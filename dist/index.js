@@ -27660,6 +27660,55 @@ async function run() {
     const {owner, repo} = context.repo;
 
     // Get the inputs from the workflow file: https://github.com/actions/toolkit/tree/master/packages/core#inputsoutputs
+
+    // Get the workflow by name
+    // Octokit Docs: https://octokit.github.io/rest.js/v17#actions-get-workflow
+    // GitHub Docs: https://developer.github.com/v3/actions/workflows/#get-a-workflow
+
+    // Get the content of the workflow file and it's sha
+    // Octokit Docs: https://octokit.github.io/rest.js/v17#repos-get-contents
+    // GitHub Docs: https://octokit.github.io/rest.js/v17#repos-get-contents
+
+    // Create commit to PR to other repositories in Org
+    // Octokit Docs: https://octokit.github.io/rest.js/v17#git
+    // GitHub Docs: https://developer.github.com/v3/git/
+
+    const newSha = process.env.GITHUB_SHA;
+
+    // Create a ref for this commit
+    // https://developer.github.com/v3/git/refs/#create-a-reference
+    const newRef = `refs/heads/workflow/${newSha.substring(0, 7)}`;
+    const createRefResponse = await github.git.createRef({
+      ...context.repo,
+      ref: newRef,
+      sha: newSha
+    });
+
+    core.debug(`Create Ref: ${JSON.stringify(createRefResponse)}`);
+
+    // Create/Update a file with the Contents API
+    // https://developer.github.com/v3/repos/contents/#create-or-update-a-file
+    const createOrUpdateFile = await github.repos.createOrUpdateFile({
+      ...context.repo,
+      path: 'README.md',
+      message: 'Regenerate README from Issues',
+      content: Buffer.from(readmeContent).toString('base64'),
+      sha: readmeSha,
+      branch: `readme/${newSha.substring(0, 7)}`
+    });
+
+    core.debug(`Create or Update File: ${JSON.stringify(createOrUpdateFile)}`);
+
+    // Create a PR with the contents (head is the new ref, base is the default branch)
+    // https://developer.github.com/v3/pulls/#create-a-pull-request
+    const createPullResponse = await github.pulls.create({
+      ...context.repo,
+      title: 'Regenerate README from Issues',
+      head: `${newRef}`,
+      base: 'master'
+    });
+
+    core.debug(`Create PR: ${JSON.stringify(createPullResponse)}`);
   } catch (error) {
     core.setFailed(error.message);
   }
