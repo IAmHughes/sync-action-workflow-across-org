@@ -24365,6 +24365,9 @@ async function run() {
     // Get the inputs from the workflow file: https://github.com/actions/toolkit/tree/master/packages/core#inputsoutputs
     const workflowName = core.getInput('workflow-name', { required: true });
 
+    // eslint-disable-next-line no-useless-escape
+    core.debug(`Searching for workflow: \'${workflowName}\'`);
+
     // Get the workflow by name
     // Octokit Docs: https://octokit.github.io/rest.js/v17#actions-get-workflow
     // GitHub Docs: https://developer.github.com/v3/actions/workflows/#get-a-
