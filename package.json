@@ -23,6 +23,7 @@
     "@actions/core": "^1.0.0",
     "@actions/exec": "^1.0.0",
     "@actions/github": "^1.0.0",
+    "@octokit/action": "^2.0.1",
     "axios": "^0.19.1"
   },
   "devDependencies": {
