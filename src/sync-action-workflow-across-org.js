@@ -14,8 +14,14 @@ async function run() {
 
     // Get the workflow by name
     // Octokit Docs: https://octokit.github.io/rest.js/v17#actions-get-workflow
-    // GitHub Docs: https://developer.github.com/v3/actions/workflows/#get-a-workflow
-    const getWorkflowResponse = await github.actions.getWorkflow({
+    // GitHub Docs: https://developer.github.com/v3/actions/workflows/#get-a-
+    // TODO: Switch back to this method once issue is fixed: https://github.com/octokit/rest.js/issues/1656#issuecomment-603962429
+    // const getWorkflowResponse = await github.actions.getWorkflow({
+    //   owner,
+    //   repo,
+    //   workflow_file_name: workflowName
+    // });
+    const getWorkflowResponse = await github.request('GET /repos/:owner/:repo/actions/workflows/:workflow_file_name', {
       owner,
       repo,
       workflow_file_name: workflowName
